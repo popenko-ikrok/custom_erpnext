@@ -289,7 +289,6 @@ class ItemConfigure {
 			}
 		});
 		this.dialog.clear();
-		this.dialog.$status_area.empty();
 		this.on_attribute_selection();
 	}
 
