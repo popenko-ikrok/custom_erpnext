@@ -11,10 +11,7 @@
 
 			<div class="product-price">
 				<!-- Final Price -->
-				<span itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-					<span itemprop="price" content="{{ price_info.price_list_rate }}">{{ price_info.formatted_price_sales_uom }}</span>
-					<span style="display:none;" itemprop="priceCurrency" content="{{ price_info.currency }}">{{ price_info.currency }}</span>
-				</span>
+				{{ price_info.formatted_price_sales_uom }}
 
 				<!-- Striked Price and Discount  -->
 				{% if price_info.formatted_mrp %}
@@ -49,7 +46,7 @@
 				<span class="in-green has-stock">
 					{{ _('In stock') }}
 					{% if product_info.show_stock_qty and product_info.stock_qty %}
-						({{ product_info.stock_qty }})
+						({{ product_info.stock_qty[0][0] }})
 					{% endif %}
 				</span>
 			{% endif %}
@@ -108,6 +105,7 @@
 								<use href="#icon-assets"></use>
 							</svg>
 						</span>
+					
 						{{ _("Add to Cart") if cart_settings.enable_checkout else  _("Add to Quote") }}
 					</button>
 				{% endif %}
