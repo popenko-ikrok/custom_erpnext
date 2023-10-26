@@ -73,7 +73,7 @@
 {% macro slider_wrapper(render_macro, list, prefix = "", row_size = 3) -%}
 <div class="{{prefix}}-macro-carousel-container macro-carousel-container">
 	<div class="{{prefix}}-macro-carousel-track-container macro-carousel-track-container">
-		<div class="{{prefix}}-macro-carousel-track macro-carousel-track">
+		<div class="{{prefix}}-macro-carousel-track macro-carousel-track" style="width: {{((list|length / row_size)|round|int) * (100) if ((list|length / row_size)|round|int) * 100 > 0 else 100}}%">
 			{% set opens = [] %}
 			{% set closes = [] %}
 			
