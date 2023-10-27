@@ -62,7 +62,7 @@ def get_context(context):
 		# Fetch child table records
 		# bundle["items"] = frappe.get_list("Product Bundle Item", filters={"parent": bundle.name}, fields=["*"])
 		bundle["parent_item"] = frappe.get_all("Item", filters={"item_code": bundle.new_item_code}, fields=["item_code", "item_name", "image"])[0]
-		item_price = frappe.get_all("Item Price", filters={'price_list': 'Стандартний продаж', 'item_code': bundle["parent_item"]["item_code"]}, fields=["price_list_rate"])
+		item_price = frappe.get_all("Item Price", filters={'price_list': 'Prom Selling', 'item_code': bundle["parent_item"]["item_code"]}, fields=["price_list_rate"])
 		website_item_exists = frappe.db.exists("Website Item", {"item_code": bundle.new_item_code})
 
 		if website_item_exists:
