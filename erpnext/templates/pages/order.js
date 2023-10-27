@@ -1,6 +1,16 @@
 // Copyright (c) 2018, Frappe Technologies Pvt. Ltd. and contributors
 // For license information, please see license.txt
 
+var payment_button = document.getElementById("pay-for-order");
+payment_button.addEventListener("click", function() {
+	// Your function logic here
+	frappe.msgprint({
+		title: __('Success'),
+		indicator: 'green',
+		message: __('Дякуємо! Ваша замовлення прийняте на розгляд, будь ласка, очікуйте дзвінка.')
+	});
+});
+
 frappe.ready(function(){
 
 	var loyalty_points_input = document.getElementById("loyalty-point-to-redeem");
