@@ -121,7 +121,9 @@
 	{% endif %}
 </div>
 {% endif %}
-
+<script>
+	frappe._messages = {{ translated_messages }};
+</script>
 {% endblock %}
 
 {% block base_scripts %}
