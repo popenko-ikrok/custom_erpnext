@@ -87,7 +87,8 @@ frappe.ready(() => {
 				{
 					label: __('Address Line 2'),
 					fieldname: 'address_line2',
-					fieldtype: 'Data'
+					fieldtype: 'Data',
+					hidden: 1
 				},
 				{
 					label: __('City/Town'),
@@ -106,6 +107,8 @@ frappe.ready(() => {
 					fieldtype: 'Link',
 					options: 'Country',
 					only_select: true,
+					default: 'Ukraine',
+					hidden: 1,
 					reqd: 1
 				},
 				{
