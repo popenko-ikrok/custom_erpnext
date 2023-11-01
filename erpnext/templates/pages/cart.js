@@ -4,7 +4,7 @@
 // JS exclusive to /cart page
 frappe.provide("erpnext.e_commerce.shopping_cart");
 var shopping_cart = erpnext.e_commerce.shopping_cart;
-
+console.log(shopping_cart);
 $.extend(shopping_cart, {
 	show_error: function(title, text) {
 		$("#cart-container").html('<div class="msg-box"><h4>' +
@@ -26,7 +26,8 @@ $.extend(shopping_cart, {
 		this.parent.find('.btn-change-address').on('click', (e) => {
 			const type = $(e.currentTarget).parents('.address-container').attr('data-address-type');
 			$(d.get_field('address_picker').wrapper).html(
-				this.get_address_template(type)
+				
+				get_address_template(type)
 			);
 			d.show();
 		});
@@ -67,31 +68,31 @@ $.extend(shopping_cart, {
 
 		return d;
 	},
-
-	get_address_template(type) {
-		return {
-			shipping: `<div class="mb-3" data-section="shipping-address">
-				<div class="row no-gutters" data-fieldname="shipping_address_name">
-					{% for address in shipping_addresses %}
-						<div class="mr-3 mb-3 w-100" data-address-name="{{address.name}}" data-address-type="shipping"
-							{% if doc.shipping_address_name == address.name %} data-active {% endif %}>
-							{% include "templates/includes/cart/address_picker_card.html" %}
-						</div>
-					{% endfor %}
-				</div>
-			</div>`,
-			billing: `<div class="mb-3" data-section="billing-address">
-				<div class="row no-gutters" data-fieldname="customer_address">
-					{% for address in billing_addresses %}
-						<div class="mr-3 mb-3 w-100" data-address-name="{{address.name}}" data-address-type="billing"
-							{% if doc.shipping_address_name == address.name %} data-active {% endif %}>
-							{% include "templates/includes/cart/address_picker_card.html" %}
-						</div>
-					{% endfor %}
-				</div>
-			</div>`,
-		}[type];
-	},
+	
+	// get_address_template(type) {
+	// 	return {
+	// 		shipping: `<div class="mb-3" data-section="shipping-address">
+	// 			<div class="row no-gutters" data-fieldname="shipping_address_name">
+	// 				{% for address in shipping_addresses %}
+	// 					<div class="mr-3 mb-3 w-100" data-address-name="{{address.name}}" data-address-type="shipping"
+	// 						{% if doc.shipping_address_name == address.name %} data-active {% endif %}>
+	// 						{% include "templates/includes/cart/address_picker_card.html" %}
+	// 					</div>
+	// 				{% endfor %}
+	// 			</div>
+	// 		</div>`,
+	// 		billing: `<div class="mb-3" data-section="billing-address">
+	// 			<div class="row no-gutters" data-fieldname="customer_address">
+	// 				{% for address in billing_addresses %}
+	// 					<div class="mr-3 mb-3 w-100" data-address-name="{{address.name}}" data-address-type="billing"
+	// 						{% if doc.shipping_address_name == address.name %} data-active {% endif %}>
+	// 						{% include "templates/includes/cart/address_picker_card.html" %}
+	// 					</div>
+	// 				{% endfor %}
+	// 			</div>
+	// 		</div>`,
+	// 	}[type];
+	// },
 
 	bind_place_order: function() {
 		$(".btn-place-order").on("click", function() {
