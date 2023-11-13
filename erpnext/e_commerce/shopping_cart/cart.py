@@ -78,12 +78,14 @@ def get_billing_addresses(party=None):
 
 
 @frappe.whitelist()
-def place_order():
+def place_order(shipment_provider, payment_type):
 	quotation = _get_cart_quotation()
 	cart_settings = frappe.db.get_value(
 		"E Commerce Settings", None, ["company", "allow_items_not_in_stock"], as_dict=1
 	)
 	quotation.company = cart_settings.company
+	quotation.shipment_provider = shipment_provider
+	quotation.payment_type = payment_type
 
 	quotation.flags.ignore_permissions = True
 	quotation.submit()

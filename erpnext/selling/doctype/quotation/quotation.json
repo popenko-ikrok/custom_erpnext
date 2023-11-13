@@ -91,6 +91,8 @@
   "contact_email",
   "shipping_address_section",
   "shipping_address_name",
+  "shipment_provider",
+  "payment_type",
   "column_break_81",
   "shipping_address",
   "company_address_section",
@@ -1066,13 +1068,29 @@
    "fieldname": "named_place",
    "fieldtype": "Data",
    "label": "Named Place"
+  },
+  {
+   "fieldname": "shipment_provider",
+   "fieldtype": "Select",
+   "label": "Shipment Provider",
+   "options": "Nova Poshta\nPickup"
+  },
+  {
+   "fieldname": "payment_type",
+   "fieldtype": "Select",
+   "label": "Payment Type",
+   "options": "In Department\nCard"
   }
  ],
  "icon": "fa fa-shopping-cart",
  "idx": 82,
  "is_submittable": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-03-20 16:04:21.567847",
+=======
+ "modified": "2023-11-09 20:12:09.417088",
+>>>>>>> 1a13a15ba0 (add(Order/Cart): Add select that help to choose payment method and shipment type)
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Quotation",

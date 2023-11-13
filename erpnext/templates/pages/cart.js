@@ -96,12 +96,32 @@ $.extend(shopping_cart, {
 
 	bind_place_order: function() {
 		$(".btn-place-order").on("click", function() {
-			shopping_cart.place_order(this);
+			var select_shipment_provider = document.getElementById('shipment-provider').value
+			var select_payment_type = document.getElementById('payment-type').value
+
+			select_shipment_provider = shopping_cart.shipment_mapper(select_shipment_provider);
+			select_payment_type = shopping_cart.shipment_mapper(select_payment_type);
+
+			shopping_cart.place_order(this, select_shipment_provider, select_payment_type);
 		});
 	},
 
+<<<<<<< HEAD
 	bind_request_quotation: function () {
 		$(".btn-request-for-quotation").on("click", function () {
+=======
+	shipment_mapper: function(val) {
+		return {
+			department: 'In Department',
+			card: 'Card',
+			nova_poshta: 'Nova Poshta',
+			pickup: 'Pickup',
+		}[val];
+	},
+
+	bind_request_quotation: function() {
+		$('.btn-request-for-quotation').on('click', function() {
+>>>>>>> 1a13a15ba0 (add(Order/Cart): Add select that help to choose payment method and shipment type)
 			shopping_cart.request_quotation(this);
 		});
 	},
@@ -222,15 +242,28 @@ $.extend(shopping_cart, {
 		});
 	},
 
+<<<<<<< HEAD
 	place_order: function (btn) {
+=======
+	place_order: function(btn, shipment_provider = 'Nova Poshta', payment_type = 'Pickup') {
+>>>>>>> 1a13a15ba0 (add(Order/Cart): Add select that help to choose payment method and shipment type)
 		shopping_cart.freeze();
 
 		return frappe.call({
 			type: "POST",
 			method: "erpnext.e_commerce.shopping_cart.cart.place_order",
 			btn: btn,
+<<<<<<< HEAD
 			callback: function (r) {
 				if (r.exc) {
+=======
+			args: {
+				shipment_provider,
+				payment_type
+			},
+			callback: function(r) {
+				if(r.exc) {
+>>>>>>> 1a13a15ba0 (add(Order/Cart): Add select that help to choose payment method and shipment type)
 					shopping_cart.unfreeze();
 					var msg = "";
 					if (r._server_messages) {
@@ -251,7 +284,6 @@ $.extend(shopping_cart, {
 
 	request_quotation: function (btn) {
 		shopping_cart.freeze();
-
 		return frappe.call({
 			type: "POST",
 			method: "erpnext.e_commerce.shopping_cart.cart.request_for_quotation",
