@@ -1,0 +1,22 @@
+
+<div class="mb-3 frappe-card p-5" data-section="shipping-address">
+	<div class="dropdown">
+		<label class="address-header" for="cars">{{ _("Choose Shipment Type") }}</label>
+		<br>
+		<select class="btn" name="shipment-provider" id="shipment-provider">
+			<option value="nova_poshta" selected>{{ _("Nova Poshta") }}</option>
+			<option value="pickup">{{ _("Pickup") }}</option>
+		</select>
+	</div>
+	<br>
+	<div class="dropdown">
+		<label class="address-header" for="cars">{{ _("Choose Payment Type") }}</label>
+		<br>
+		<select class="dropdown-sh btn" name="payment-type" id="payment-type">
+			<option class="dropdown-sh-item" value="department">{{ _("In Department") }}</option>
+			<option class="dropdown-sh-item" value="card" selected>{{ _("Card", context="Payment Type") }}</option>
+		</select>
+	</div>
+</div>
+
+	
