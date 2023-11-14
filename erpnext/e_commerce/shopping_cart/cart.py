@@ -101,6 +101,8 @@ def place_order(shipment_provider, payment_type):
 
 	sales_order = frappe.get_doc(_make_sales_order(quotation.name, ignore_permissions=True))
 	sales_order.payment_schedule = []
+	sales_order.shipment_provider = shipment_provider
+	sales_order.payment_method = payment_type
 
 	if not cint(cart_settings.allow_items_not_in_stock):
 		for item in sales_order.get("items"):
