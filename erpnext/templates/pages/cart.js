@@ -106,10 +106,6 @@ $.extend(shopping_cart, {
 		});
 	},
 
-<<<<<<< HEAD
-	bind_request_quotation: function () {
-		$(".btn-request-for-quotation").on("click", function () {
-=======
 	shipment_mapper: function(val) {
 		return {
 			department: 'In Department',
@@ -121,7 +117,6 @@ $.extend(shopping_cart, {
 
 	bind_request_quotation: function() {
 		$('.btn-request-for-quotation').on('click', function() {
->>>>>>> 1a13a15ba0 (add(Order/Cart): Add select that help to choose payment method and shipment type)
 			shopping_cart.request_quotation(this);
 		});
 	},
@@ -242,28 +237,19 @@ $.extend(shopping_cart, {
 		});
 	},
 
-<<<<<<< HEAD
-	place_order: function (btn) {
-=======
 	place_order: function(btn, shipment_provider = 'Nova Poshta', payment_type = 'Pickup') {
->>>>>>> 1a13a15ba0 (add(Order/Cart): Add select that help to choose payment method and shipment type)
 		shopping_cart.freeze();
 
 		return frappe.call({
 			type: "POST",
 			method: "erpnext.e_commerce.shopping_cart.cart.place_order",
 			btn: btn,
-<<<<<<< HEAD
-			callback: function (r) {
-				if (r.exc) {
-=======
 			args: {
 				shipment_provider,
 				payment_type
 			},
 			callback: function(r) {
 				if(r.exc) {
->>>>>>> 1a13a15ba0 (add(Order/Cart): Add select that help to choose payment method and shipment type)
 					shopping_cart.unfreeze();
 					var msg = "";
 					if (r._server_messages) {
