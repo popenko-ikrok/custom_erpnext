@@ -22,7 +22,7 @@
 {%- endmacro %}
 
 {% macro review_card_template(review) -%}
-<div class="feedback-card-wrapper col-sm-2">
+<div class="feedback-card-wrapper col-sm-2" style="max-width: 25%;">
 	<div class="feedback-img-wrapper">
 		<img src="{{review.website_image}}" class="packages-card-image">
 	</div>
@@ -34,64 +34,36 @@
 		<p title="{{review.user}}" class="feedback-author">{{review.customer}}</p>
 		<div class="rating">
 			{% for i in [1, 2, 3, 4, 5] %}
-				<svg class="icon icon-md {% if i <= review.rating * 5 %} star-click {% endif %}" data-rating="{{ i }}">
-					<use href="#icon-star"></use>
-				</svg>
+			<svg class="icon icon-md {% if i <= review.rating * 5 %} star-click {% endif %}" data-rating="{{ i }}">
+				<use href="#icon-star"></use>
+			</svg>
 			{% endfor %}
 		</div>
 	</div>
 </div>
 {%- endmacro %}
 
-{% macro packages_template(bundle) -%}
-	<div class="package-card col-md-5">
-		<div class="package-card-text">
-			<div class="packages-card-text-title">
-				{{bundle.parent_item.item_name}}
-			</div>
-			<div class="packages-card-text-description">
-				{{ bundle.price }} грн
-			</div>
-			{% if bundle.route %}
-			<a style="text-decoration: none;" href="{{ bundle.route }}">
-				<button class="packages-card-button btn home-button">
-					Детальніше
-				</button>
-			</a>
-			{% else %}
-			<button class="packages-card-button disabled">
-				Скоро
-			</button>
-			{% endif %}
-
-		</div>
-		<div class="img-wrapper">
-			<img class="packages-card-image" src="{{ bundle.parent_item.image }}"
-				alt="Продукти здорового харчування">
-		</div>
-	</div>
-{%- endmacro %}
-
 {% macro slider_wrapper(render_macro, list, prefix = "", row_size = 3) -%}
 <div class="{{prefix}}-macro-carousel-container macro-carousel-container">
 	<div class="{{prefix}}-macro-carousel-track-container macro-carousel-track-container">
-		<div class="{{prefix}}-macro-carousel-track macro-carousel-track" style="width: {{((list|length / row_size)|round|int) * (100) if ((list|length / row_size)|round|int) * 100 > 0 else 100}}%">
+		<div class="{{prefix}}-macro-carousel-track macro-carousel-track" style="width: 
+			{{((list|length / row_size)|round|int) * (100) if ((list|length / row_size)|round|int) * 100 > 0 else 100}}%">
 			{% set opens = [] %}
 			{% set closes = [] %}
-			
+
 			{% for item in range((list|length / row_size)|round|int + 1) %}
-				{{ opens.append(1+(row_size*(loop.index-1))) or "" }}
-				{{ closes.append(row_size+(row_size*(loop.index-1))) or "" }}
+			{{ opens.append(1+(row_size*(loop.index-1))) or "" }}
+			{{ closes.append(row_size+(row_size*(loop.index-1))) or "" }}
 			{% endfor %}
 
 			{% for item in list %}
-				{% if loop.index == 1 or loop.index in opens %}
-					<div class="{{prefix}}-macro-carousel-slide macro-carousel-slide">
+			{% if loop.index == 1 or loop.index in opens %}
+			<div class="{{prefix}}-macro-carousel-slide macro-carousel-slide">
 				{%- endif %}
 				{{ render_macro(item) }}
 				{% if loop.index == row_size or (loop.index in closes) %}
-					</div>
-				{%- endif %}
+			</div>
+			{%- endif %}
 			{% endfor %}
 		</div>
 	</div>
@@ -162,18 +134,17 @@ margin-top: -100px;
 							</div>
 						</div>
 
-						<div class="image-wrapper">
-							<img class="carousel-image" src="/files/slider-nuts.png"
-								alt="Продукти здорового харчування">
-						</div>
+							<img class="carousel-image" src="/files/slider-nuts.png" alt="Продукти здорового харчування">
+
 					</div>
 					<div class="carousel-slide-button">
 						Купити
 					</div>
 				</div>
 				<div class="slider-controls">
-					<button class="slider-control"><</button>
-					<button class="slider-control">></button>
+					<button class="slider-control">
+						< </button>
+							<button class="slider-control">></button>
 				</div>
 			</div>
 			<div class="vertical-sep"></div>
@@ -190,8 +161,7 @@ margin-top: -100px;
 					<div class="carousel-banner-button">
 						Купити
 					</div>
-					<img class="carousel-image banner-image" src="/files/slider-products.png"
-						alt="Продукти здорового харчування">
+					<img class="carousel-image banner-image" src="/files/slider-products.png" alt="Продукти здорового харчування">
 				</div>
 			</div>
 		</div>
@@ -205,24 +175,84 @@ margin-top: -100px;
 			<object data="./categories-circle.svg" type="image/svg+xml" id="circlesSvg"></object>
 		</div>
 	</section>
-	{% if bundles %}
 	<section id="home-packages">
 		<div class="section-title">
 			<h2 class="col-md-5">Пакетні пропозиції</h2>
 			<div class="vertical-sep"></div>
 			<div class="vertical-sep"></div>
 			<div class="slider-controls col-md-5">
-				<button class="slider-control"><</button>
-				<button class="slider-control">></button>
+				<button class="slider-control">
+					< </button>
+						<button class="slider-control">></button>
 			</div>
 		</div>
 		<div class="packages-container">
-			{% for bundle in bundles %}
-			{{ packages_template(bundle) }}
-			{% endfor %}
+			<div class="package-card col-md-5">
+				<div class="package-card-text">
+					<div class="packages-card-text-title">
+						Стартовий набір «Економ»
+					</div>
+					<div class="packages-card-text-description">
+						3000 грн
+					</div>
+					<div class="packages-card-button">
+						Купити
+					</div>
+				</div>
+				<div class="img-wrapper">
+					<img class="packages-card-image" src="/files/product-package-image.png" alt="Продукти здорового харчування">
+				</div>
+			</div>
+			<div class="package-card col-md-5">
+				<div class="package-card-text">
+					<div class="packages-card-text-title">
+						Стартовий набір «Економ»
+					</div>
+					<div class="packages-card-text-description">
+						3000 грн
+					</div>
+					<div class="packages-card-button">
+						Купити
+					</div>
+				</div>
+				<div class="img-wrapper">
+					<img class="packages-card-image" src="/files/product-package-image.png" alt="Продукти здорового харчування">
+				</div>
+			</div>
+			<div class="package-card col-md-5">
+				<div class="package-card-text">
+					<div class="packages-card-text-title">
+						Стартовий набір «Економ»
+					</div>
+					<div class="packages-card-text-description">
+						3000 грн
+					</div>
+					<div class="packages-card-button">
+						Купити
+					</div>
+				</div>
+				<div class="img-wrapper">
+					<img class="packages-card-image" src="/files/product-package-image.png" alt="Продукти здорового харчування">
+				</div>
+			</div>
+			<div class="package-card col-md-5">
+				<div class="package-card-text">
+					<div class="packages-card-text-title">
+						Стартовий набір «Економ»
+					</div>
+					<div class="packages-card-text-description">
+						3000 грн
+					</div>
+					<div class="packages-card-button">
+						Купити
+					</div>
+				</div>
+				<div class="img-wrapper">
+					<img class="packages-card-image" src="/files/product-package-image.png" alt="Продукти здорового харчування">
+				</div>
+			</div>
 		</div>
 	</section>
-	{% endif %}
 
 	{% if blogs %}
 	<section id="home-publications">
@@ -231,8 +261,9 @@ margin-top: -100px;
 			<div class="vertical-sep"></div>
 			<div class="vertical-sep"></div>
 			<div class="slider-controls col-md-5">
-				<button class="blogs-slider-control slider-control" id="blogs-prev-btn"><</button>
-				<button class="blogs-slider-control slider-control" id="blogs-next-btn">></button>
+				<button class="blogs-slider-control slider-control" id="blogs-prev-btn">
+					< </button>
+						<button class="blogs-slider-control slider-control" id="blogs-next-btn">></button>
 			</div>
 		</div>
 		<div class="cards-wrapper">
@@ -248,8 +279,9 @@ margin-top: -100px;
 			<div class="vertical-sep"></div>
 			<div class="vertical-sep"></div>
 			<div class="slider-controls col-md-5">
-				<button class="review-slider-control slider-control" id="review-prev-btn"><</button>
-				<button class="review-slider-control slider-control" id="review-next-btn">></button>
+				<button class="review-slider-control slider-control" id="review-prev-btn">
+					< </button>
+						<button class="review-slider-control slider-control" id="review-next-btn">></button>
 			</div>
 		</div>
 		<div class="cards-wrapper">
@@ -296,7 +328,7 @@ margin-top: -100px;
 				}
 			}
 
-			carouselTrack[sliderIndex].style.transform = 
+			carouselTrack[sliderIndex].style.transform =
 				`translateX(-${activeSlideIndex[sliderIndex] * imgWidth}px)`;
 		}
 
@@ -313,48 +345,48 @@ margin-top: -100px;
 				}
 			}
 		}
-		
-		nextBtn.forEach((btn, i)=> {
+
+		nextBtn.forEach((btn, i) => {
 			btn.addEventListener("click", () => {
 				moveSlide("next", i)
 			});
 		});
-		prevBtn.forEach((btn, i)=> {
+		prevBtn.forEach((btn, i) => {
 			btn.addEventListener("click", () => {
 				moveSlide("prev", i)
 			});
 		});
 
 		document.addEventListener("DOMContentLoaded", () => {
-			
+
 		});
 
 		const circlesSvg = document.getElementById("circlesSvg");
-		circlesSvg.addEventListener("load",() => {
-			
+		circlesSvg.addEventListener("load", () => {
+
 
 			const urls = {
-			food: '/all-products',
-			health: '/all-products',
-			home: '/all-products',
+				food: 'https://my.upcompany.online/all-products?field_filters=%7B%22item_group%22%3A%5B%22%D0%9F%D0%B5%D1%80%D1%88%D1%96+%D1%81%D1%82%D1%80%D0%B0%D0%B2%D0%B8%22%5D%7D',
+				health: 'https://my.upcompany.online/all-products?',
+				home: 'https://my.upcompany.online/all-products?field_filters=%7B%22item_group%22%3A%5B%22%D0%9A%D0%BE%D1%80%D0%B8%D1%81%D0%BD%D0%B8%D0%B9+%D0%B4%D1%96%D0%BC%22%5D%7D',
 			};
 
 			const svgDoc = circlesSvg.contentDocument;
 
 			const circles = {
-			food: svgDoc.getElementById('circle_food'),
-			health: svgDoc.getElementById('circle_health'),
-			home: svgDoc.getElementById('circle_home'),
+				food: svgDoc.getElementById('circle_food'),
+				health: svgDoc.getElementById('circle_health'),
+				home: svgDoc.getElementById('circle_home'),
 			};
 
 			circles.food.addEventListener('click', () => {
-			window.open(urls.food, '_blank').focus();
+				window.open(urls.food, '_blank').focus();
 			});
 			circles.health.addEventListener('click', () => {
-			window.open(urls.health, '_blank').focus();
+				window.open(urls.health, '_blank').focus();
 			});
 			circles.home.addEventListener('click', () => {
-			window.open(urls.home, '_blank').focus();
+				window.open(urls.home, '_blank').focus();
 			});
 		});
 	</script>

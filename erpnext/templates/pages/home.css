@@ -87,20 +87,22 @@ html{
 } */
 
 .slider-controls{
+	position: relative;
 	height: 63px;
 	display: flex;
 	justify-content: flex-end;
+	z-index: 10;
 }
 
 .home-carousel-slider .slider-controls{
 	padding: 0 24px 20px 24px;
 }
 
-.image-wrapper {
+/* .image-wrapper {
 	width: 50%;
 	height: 400px;
 	position: relative;
-}
+} */
 
 .home-carousel-slide{
 	display: flex;
@@ -109,10 +111,7 @@ html{
 
 .home-carousel-slide .carousel-image{
 	position: absolute;
-	height: 100%;
 	right: 0;
-	object-fit: contain;
-	overflow: visible;
 }
 
 .banner-image{
@@ -143,7 +142,7 @@ html{
 .carousel-slide-text,
 .carousel-banner-text{
 	padding: 70px 0 0 40px;
-	width: 50%;
+	/* width: 50%; */
 	position: relative;
 	z-index: 1;
 }
