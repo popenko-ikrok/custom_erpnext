@@ -53,8 +53,10 @@
 				{{ bundle.price }} грн
 			</div>
 			{% if bundle.route %}
-			<a href="{{ bundle.route }}">
-				<button class="packages-card-button">Детальніше</button>
+			<a style="text-decoration: none;" href="{{ bundle.route }}">
+				<button class="packages-card-button btn home-button">
+					Детальніше
+				</button>
 			</a>
 			{% else %}
 			<button class="packages-card-button disabled">
