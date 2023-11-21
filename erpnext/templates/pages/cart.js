@@ -112,6 +112,9 @@ $.extend(shopping_cart, {
 			card: 'Card',
 			nova_poshta: 'Nova Poshta',
 			pickup: 'Pickup',
+			ukr_poshta: 'Ukrposhta',
+			on_account: 'Pay with Account'
+
 		}[val];
 	},
 

@@ -5,6 +5,7 @@
 		<br>
 		<select class="dropdown-sh btn col-6" name="shipment-provider" id="shipment-provider">
 			<option value="nova_poshta" selected>{{ _("Nova Poshta") }}</option>
+			<option value="ukr_poshta">{{ _("Ukrposhta") }}</option>
 			<option value="pickup">{{ _("Pickup") }}</option>
 		</select>
 	</div>
@@ -13,8 +14,9 @@
 		<label class="address-header" for="cars">{{ _("Choose Payment Type") }}</label>
 		<br>
 		<select class="dropdown-sh btn col-6" name="payment-type" id="payment-type">
-			<option class="dropdown-sh-item" value="department">{{ _("In Department") }}</option>
-			<option class="dropdown-sh-item" value="card" selected>{{ _("Card", context="Payment Type") }}</option>
+			<option value="department">{{ _("In Department") }}</option>
+			<option value="on_account">{{ _("Pay with Account") }}</option>
+			<option value="card" selected>{{ _("Card", context="Payment Type") }}</option>
 		</select>
 	</div>
 </div>
