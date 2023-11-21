@@ -7,7 +7,7 @@ payment_button.addEventListener("click", function() {
 	frappe.msgprint({
 		title: __('Success'),
 		indicator: 'green',
-		message: __('Дякуємо! Ваша замовлення прийняте на розгляд, будь ласка, очікуйте дзвінка.')
+		message: __('Дякуємо за замовлення! Очікуйте на дзвінкок менеджера для підтвердження замовлення.')
 	});
 });
 
