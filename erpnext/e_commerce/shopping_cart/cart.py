@@ -84,8 +84,6 @@ def place_order(shipment_provider, payment_type):
 		"E Commerce Settings", None, ["company", "allow_items_not_in_stock"], as_dict=1
 	)
 	quotation.company = cart_settings.company
-	quotation.shipment_provider = shipment_provider
-	quotation.payment_type = payment_type
 
 	quotation.flags.ignore_permissions = True
 	quotation.submit()

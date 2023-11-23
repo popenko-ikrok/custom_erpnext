@@ -91,8 +91,6 @@
   "contact_email",
   "shipping_address_section",
   "shipping_address_name",
-  "shipment_provider",
-  "payment_type",
   "column_break_81",
   "shipping_address",
   "company_address_section",
@@ -1068,25 +1066,13 @@
    "fieldname": "named_place",
    "fieldtype": "Data",
    "label": "Named Place"
-  },
-  {
-   "fieldname": "shipment_provider",
-   "fieldtype": "Select",
-   "label": "Shipment Provider",
-   "options": "Nova Poshta\nPickup"
-  },
-  {
-   "fieldname": "payment_type",
-   "fieldtype": "Select",
-   "label": "Payment Type",
-   "options": "In Department\nCard"
   }
  ],
  "icon": "fa fa-shopping-cart",
  "idx": 82,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-11-09 20:12:09.417088",
+ "modified": "2023-11-23 15:13:13.145258",
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Quotation",

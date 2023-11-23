@@ -99,9 +99,6 @@ $.extend(shopping_cart, {
 			var select_shipment_provider = document.getElementById('shipment-provider').value
 			var select_payment_type = document.getElementById('payment-type').value
 
-			select_shipment_provider = shopping_cart.shipment_mapper(select_shipment_provider);
-			select_payment_type = shopping_cart.shipment_mapper(select_payment_type);
-
 			shopping_cart.place_order(this, select_shipment_provider, select_payment_type);
 		});
 	},
@@ -230,7 +227,7 @@ $.extend(shopping_cart, {
 		});
 	},
 
-	place_order: function(btn, shipment_provider = 'Nova Poshta', payment_type = 'Pickup') {
+	place_order: function(btn, shipment_provider = '', payment_type = '') {
 		shopping_cart.freeze();
 
 		return frappe.call({
