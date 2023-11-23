@@ -24,15 +24,15 @@
 	{% endfor %}
 </div>
 
-<!-- Billing Address -->
+<!-- Billing Address
 <div class="checkbox ml-1 mb-2">
 	<label for="input_same_billing">
 		<input type="checkbox" class="product-filter" id="input_same_billing" checked style="width: 14px !important">
 		<span class="label-area font-md">{{ _('Billing Address is same as Shipping Address') }}</span>
 	</label>
-</div>
+</div> -->
 
-{% if billing_addresses %}
+<!-- {% if billing_addresses %}
 	<div class="mb-3 frappe-card p-5" data-section="billing-address">
 		<div class="d-flex">
 			<div class="col-6 address-header"><h6>{{ _("Billing Address") }}</h6></div>
@@ -52,7 +52,7 @@
 			{% endif %}
 		{% endfor %}
 	</div>
-{% endif %}
+{% endif %} -->
 
 <script>
 frappe.ready(() => {
@@ -97,6 +97,11 @@ frappe.ready(() => {
 					reqd: 1
 				},
 				{
+					fieldname: "column_break0",
+					fieldtype: "Column Break",
+					width: "50%"
+				},
+				{
 					label: __('State'),
 					fieldname: 'state',
 					fieldtype: 'Data'
@@ -112,11 +117,6 @@ frappe.ready(() => {
 					reqd: 1
 				},
 				{
-					fieldname: "column_break0",
-					fieldtype: "Column Break",
-					width: "50%"
-				},
-				{
 					label: __('Address Type'),
 					fieldname: 'address_type',
 					fieldtype: 'Select',
@@ -124,6 +124,8 @@ frappe.ready(() => {
 						'Billing',
 						'Shipping'
 					],
+					default: 'Shipping',
+					hidden: 1,
 					reqd: 1
 				},
 				{
