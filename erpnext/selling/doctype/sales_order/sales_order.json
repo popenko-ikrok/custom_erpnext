@@ -1630,22 +1630,22 @@
   },
   {
    "fieldname": "payment_method",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "label": "Payment Method",
-   "options": "In Department\nCard"
+   "options": "Payment Methods"
   },
   {
    "fieldname": "shipment_provider",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "label": "Shipment Provider",
-   "options": "Nova Poshta\nPickup"
+   "options": "Shipment Providers"
   }
  ],
  "icon": "fa fa-file-text",
  "idx": 105,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-11-14 12:00:18.338792",
+ "modified": "2023-11-23 15:16:04.899802",
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Sales Order",
