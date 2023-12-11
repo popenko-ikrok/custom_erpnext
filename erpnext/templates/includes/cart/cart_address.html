@@ -97,6 +97,13 @@ frappe.ready(() => {
 					reqd: 1
 				},
 				{
+					label: __('Shipment Provider'),
+					fieldname: 'shipment_provider',
+					fieldtype: 'Link',
+					options: 'Shipment Providers',
+					reqd: 1
+				},
+				{
 					fieldname: "column_break0",
 					fieldtype: "Column Break",
 					width: "50%"
@@ -138,6 +145,16 @@ frappe.ready(() => {
 					fieldtype: "Data",
 					label: "Phone",
 					reqd: 1
+				},
+				{
+					fieldname: "section_break1",
+					fieldtype: "Section Break",
+					label: "Shipment Options",
+				},
+				{
+					fieldname: "phone2",
+					fieldtype: "Data",
+					label: "Phone",
 				},
 			],
 			primary_action_label: __('Save'),
