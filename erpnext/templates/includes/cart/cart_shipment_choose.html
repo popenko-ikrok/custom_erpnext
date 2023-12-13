@@ -1,0 +1,38 @@
+<div class="mb-3 frappe-card p-5" data-section="shipping-address">
+	<div class="d-flex">
+		<div class="col-6 address-header"><h6>{{ _("Shipping Address") }}</h6></div>
+		<div class="col-6" style="padding: 0;">
+			<a class="ml-4 btn-new-address" role="button">{{ _("Add options for Shipment") }}</a>
+		</div>
+	</div>
+
+	<hr>
+	{% for address in shipping_addresses %}
+	{% if doc.shipping_address_name == address.name %}
+	<div class="row no-gutters" data-fieldname="shipping_address_name">
+		<div class="w-100 address-container" data-address-name="{{address.name}}" data-address-type="shipping" data-active>
+			{% include "templates/includes/cart/address_card.html" %}
+		</div>
+	</div>
+	{% endif %}
+	{% endfor %}
+</div>
+
+<script>
+frappe.ready(() => {
+	$('.btn-new-address').click(() => {
+		const d = new frappe.ui.Dialog({
+			title: __('New Address'),
+			fields: [
+				{
+					label: __('Address Title'),
+					fieldname: 'address_title',
+					fieldtype: 'Data',
+					reqd: 1
+				}]
+		})
+		d.show();
+	});
+
+});
+</script>
