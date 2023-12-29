@@ -2,7 +2,7 @@
 
 {% block title %} {{ _("Shopping Cart") }} {% endblock %}
 
-{% block header %}<h3 class="shopping-cart-header mt-2 mb-6">{{ _("Shopping Cart") }}</h1>{% endblock %}
+{% block header %}<h3 class="shopping-cart-header mt-2 mb-6">{{ _("Shopping Cart") }}</h3>{% endblock %}
 
 {% block header_actions %}
 {% endblock %}
@@ -15,7 +15,7 @@
 <div class="cart-container">
 	<div class="row m-0">
 		<!-- Left section -->
-		<div class="col-md-8">
+		<div class="col-md-8" style="padding: 0px;">
 			<div class="frappe-card p-5 mb-4">
 				<div id="cart-error" class="alert alert-danger" style="display: none;"></div>
 				<div class="cart-items-header">
@@ -70,13 +70,15 @@
 			<!-- Terms and Conditions -->
 			{% if doc.items %}
 				{% if doc.terms %}
-					<div class="t-and-c-container mt-4 frappe-card">
-						<h5>{{ _("Terms and Conditions") }}</h5>
-						<div class="t-and-c-terms mt-2">
-							{{ doc.terms }}
-						</div>
+				<div class="t-and-c-container mt-4 frappe-card">
+					<h5>{{ _("Terms and Conditions") }}</h5>
+					<div class="t-and-c-terms mt-2">
+						{{ doc.terms }}
 					</div>
+				</div>
 				{% endif %}
+				
+			{% include "templates/includes/cart/cart_shipment_choose.html" %}
 		</div>
 
 		<!-- Right section -->
@@ -98,9 +100,8 @@
 					{% include "templates/includes/cart/cart_payment_summary.html" %}
 				</div>
 
-				{# {% include "templates/includes/cart/cart_shipment_choose.html" %} #}
-				{% include "templates/includes/cart/cart_address.html" %}  
-				{% include "templates/includes/cart/cart_shipment_picker.html" %}
+				{# {% include "templates/includes/cart/cart_address.html" %} #}
+				{# {% include "templates/includes/cart/cart_shipment_picker.html" %} #}
 			</div>
 		</div>
 		{% endif %}
