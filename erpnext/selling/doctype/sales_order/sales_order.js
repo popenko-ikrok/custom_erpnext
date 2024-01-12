@@ -514,7 +514,7 @@ erpnext.selling.SalesOrderController = class SalesOrderController extends erpnex
 
 	make_delivery_note_based_on_delivery_date() {
 		var me = this;
-
+		
 		var delivery_dates = this.frm.doc.items.map(i => i.delivery_date);
 		delivery_dates = [ ...new Set(delivery_dates) ];
 

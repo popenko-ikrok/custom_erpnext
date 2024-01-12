@@ -50,6 +50,7 @@ def get_cart_quotation(doc=None):
 		"billing_addresses": get_billing_addresses(party),
 		"shipping_rules": get_applicable_shipping_rules(party),
 		"cart_settings": frappe.get_cached_doc("E Commerce Settings"),
+		"shipment_form": get_shipment_form(party),
 	}
 
 
@@ -78,7 +79,23 @@ def get_billing_addresses(party=None):
 
 
 @frappe.whitelist()
-def place_order(shipment_provider, payment_type):
+def place_order():
+	party = get_party()
+	shipment_form = get_shipment_form(party)
+	if shipment_form:
+		doc = dict(
+			address_title=shipment_form.id,
+			address_type="Shipping",
+			address_line1=shipment_form.warehouse,
+			city=shipment_form.city,
+			country="Ukraine",
+			phone=shipment_form.phone
+		)
+		# addresses = get_address_docs(party=party)
+		if not frappe.db.exists("Address", {"address_title": doc.get("address_title")}):
+			address = add_new_address(doc)
+	else:
+		frappe.throw(_("Set Shipment Information"))
 	quotation = _get_cart_quotation()
 	cart_settings = frappe.db.get_value(
 		"E Commerce Settings", None, ["company", "allow_items_not_in_stock"], as_dict=1
@@ -99,8 +116,6 @@ def place_order(shipment_provider, payment_type):
 
 	sales_order = frappe.get_doc(_make_sales_order(quotation.name, ignore_permissions=True))
 	sales_order.payment_schedule = []
-	sales_order.shipment_provider = shipment_provider
-	sales_order.payment_method = payment_type
 
 	if not cint(cart_settings.allow_items_not_in_stock):
 		for item in sales_order.get("items"):
@@ -122,6 +137,20 @@ def place_order(shipment_provider, payment_type):
 
 	if hasattr(frappe.local, "cookie_manager"):
 		frappe.local.cookie_manager.delete_cookie("cart_count")
+	
+	# print(sales_order.__dict__)
+	if shipment_form:
+		from erpnext.selling.doctype.sales_order.sales_order import make_delivery_note
+	
+		delivery_note = make_delivery_note(sales_order)
+		delivery_note.shipment_provider="nova_poshta"
+		delivery_note.custom_shipment_form=shipment_form.id
+		delivery_note.delivery_to_city=shipment_form.city_id
+		delivery_note.delivery_to_warehouse=shipment_form.warehouse_id
+		delivery_note.recipient_full_name=shipment_form.full_name
+		delivery_note._recipient_phone=shipment_form.phone
+
+		delivery_note.save()
 
 	return sales_order.name
 
@@ -518,7 +547,6 @@ def get_party(user=None):
 
 	if party:
 		return frappe.get_doc(party_doctype, party)
-
 	else:
 		if not cart_settings.enabled:
 			frappe.local.flags.redirect_location = "/contact"
@@ -724,3 +752,29 @@ def apply_coupon_code(applied_code, applied_referral_sales_partner):
 			quotation.save()
 
 	return quotation
+
+
+# Custom functions 
+def get_shipment_form(party=None):
+	if not party:
+		party = get_party()
+	owner = party.owner
+	shipment_forms = frappe.db.get_all(
+		"NovaPoshta Shipment Form",
+		fields=(
+			"name as id",
+			"full_name",
+			"phone",
+			"city.description as city",
+			"warehouse.description as warehouse",
+			"city as city_id",
+			"warehouse as warehouse_id",
+			"payment_method.payment_method_name",
+			"email",
+			"default"
+			),
+		filters=dict(owner=party.name, default=True),
+	)
+	if shipment_forms:
+		return shipment_forms[0]
+	return None

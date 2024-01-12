@@ -28,13 +28,18 @@
 				
 				<div id="NovaPoshtaFields">
 					<div class="mb-3">
-						<label for="cityInput" class="form-label">{{ _("City") }} *</label>
-						<input class="form-control col-5" type="text" id="cityInput" name="additionalField1" placeholder="Додаткове поле 1">
+						<label for="cityInput" class="form-label">{{ _("Area") }} *</label>
+						<input class="form-control col-5" type="text" id="cityInput" name="additionalField1" placeholder="Area">
 						<div id="autocomplete-results" style="display: none;"></div>
 					</div>
 					<div class="mb-3">
+						<label for="warehouseInput" class="form-label">{{ _("City") }} *</label>
+						<input class="form-control col-5" type="text" id="warehouseInput" name="additionalField2" placeholder="City">
+						<br>
+					</div>
+					<div class="mb-3">
 						<label for="warehouseInput" class="form-label">{{ _("Warehouse") }} *</label>
-						<input class="form-control col-5" type="text" id="warehouseInput" name="additionalField2" placeholder="Додаткове поле 2">
+						<input class="form-control col-5" type="text" id="warehouseInput" name="additionalField2" placeholder="City">
 						<br>
 					</div>
 				</div>
@@ -42,6 +47,10 @@
 				<label for="pickup">
 					<input type="radio" id="pickup" name="provider" value="pickup">Самовивіз
 				</label><br>
+
+				<div id="myDiv">
+					
+				</div>
 			
 			
 				
@@ -54,13 +63,8 @@
 
 
 <script>
-	// document.getElementById("shipment-data").addEventListener('submit', function(e) {
-	// 	e.preventDefault();
-
-	// 	var formData = new FormData(this);
-	// 	console.log(formData);
-	// });
 	frappe.ready(() => {
+		// Visability for fields
 		$(document).ready(function() {
 			$('input[type="radio"][name="option"]').change(function() {
 				if (this.value === 'novaposhta_option') {
@@ -70,6 +74,7 @@
 				}
 			});
 		});
+		// TODO
 		$(document).ready(function() {
 		$("#cityInput").on("input", function() {
 			var input = $(this).val();
@@ -104,20 +109,5 @@
 		}
 	});
 	});
-	// frappe.ready(function() {
-	// 	frappe.boot.user = {};
-	// 	frappe.boot.user['can_create'] = "NovaPoshta cities";
-	// 	frappe.boot.user['can_select'] = "NovaPoshta cities";
-	// 	frappe.ui.form.make_control({
-	// 		parent: $('#NovaPoshtaFields'),
-	// 		df: {
-	// 			label: 'Select User',
-	// 			fieldname: 'np_cities',
-	// 			fieldtype: 'Link',
-	// 			options: 'NovaPoshta cities'
-	// 		},
-	// 		render_input: true
-	// 	})
-	// });
 </script>
-	
+

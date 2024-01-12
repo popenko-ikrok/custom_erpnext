@@ -96,10 +96,7 @@ $.extend(shopping_cart, {
 
 	bind_place_order: function() {
 		$(".btn-place-order").on("click", function() {
-			var select_shipment_provider = document.getElementById('shipment-provider').value
-			var select_payment_type = document.getElementById('payment-type').value
-
-			shopping_cart.place_order(this, select_shipment_provider, select_payment_type);
+			shopping_cart.place_order(this);
 		});
 	},
 
@@ -227,17 +224,13 @@ $.extend(shopping_cart, {
 		});
 	},
 
-	place_order: function(btn, shipment_provider = '', payment_type = '') {
+	place_order: function(btn) {
 		shopping_cart.freeze();
 
 		return frappe.call({
 			type: "POST",
 			method: "erpnext.e_commerce.shopping_cart.cart.place_order",
 			btn: btn,
-			args: {
-				shipment_provider,
-				payment_type
-			},
 			callback: function(r) {
 				if(r.exc) {
 					shopping_cart.unfreeze();
