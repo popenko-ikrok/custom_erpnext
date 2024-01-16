@@ -68,31 +68,6 @@ $.extend(shopping_cart, {
 
 		return d;
 	},
-	
-	// get_address_template(type) {
-	// 	return {
-	// 		shipping: `<div class="mb-3" data-section="shipping-address">
-	// 			<div class="row no-gutters" data-fieldname="shipping_address_name">
-	// 				{% for address in shipping_addresses %}
-	// 					<div class="mr-3 mb-3 w-100" data-address-name="{{address.name}}" data-address-type="shipping"
-	// 						{% if doc.shipping_address_name == address.name %} data-active {% endif %}>
-	// 						{% include "templates/includes/cart/address_picker_card.html" %}
-	// 					</div>
-	// 				{% endfor %}
-	// 			</div>
-	// 		</div>`,
-	// 		billing: `<div class="mb-3" data-section="billing-address">
-	// 			<div class="row no-gutters" data-fieldname="customer_address">
-	// 				{% for address in billing_addresses %}
-	// 					<div class="mr-3 mb-3 w-100" data-address-name="{{address.name}}" data-address-type="billing"
-	// 						{% if doc.shipping_address_name == address.name %} data-active {% endif %}>
-	// 						{% include "templates/includes/cart/address_picker_card.html" %}
-	// 					</div>
-	// 				{% endfor %}
-	// 			</div>
-	// 		</div>`,
-	// 	}[type];
-	// },
 
 	bind_place_order: function() {
 		$(".btn-place-order").on("click", function() {
@@ -100,17 +75,6 @@ $.extend(shopping_cart, {
 		});
 	},
 
-	shipment_mapper: function(val) {
-		return {
-			department: 'In Department',
-			card: 'Card',
-			nova_poshta: 'Nova Poshta',
-			pickup: 'Pickup',
-			ukr_poshta: 'Ukrposhta',
-			on_account: 'Pay with Account'
-
-		}[val];
-	},
 
 	bind_request_quotation: function() {
 		$('.btn-request-for-quotation').on('click', function() {

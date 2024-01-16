@@ -138,7 +138,6 @@ def place_order():
 	if hasattr(frappe.local, "cookie_manager"):
 		frappe.local.cookie_manager.delete_cookie("cart_count")
 	
-	# print(sales_order.__dict__)
 	if shipment_form:
 		from erpnext.selling.doctype.sales_order.sales_order import make_delivery_note
 	
@@ -760,7 +759,7 @@ def get_shipment_form(party=None):
 		party = get_party()
 	owner = party.owner
 	shipment_forms = frappe.db.get_all(
-		"NovaPoshta Shipment Form",
+		"Shipment Form",
 		fields=(
 			"name as id",
 			"full_name",
