@@ -147,7 +147,7 @@ def place_order():
 		delivery_note.delivery_to_city=shipment_form.city_id
 		delivery_note.delivery_to_warehouse=shipment_form.warehouse_id
 		delivery_note.recipient_full_name=shipment_form.full_name
-		delivery_note._recipient_phone=shipment_form.phone
+		delivery_note.recipient_phone=shipment_form.phone
 
 		delivery_note.save()
 
@@ -772,7 +772,7 @@ def get_shipment_form(party=None):
 			"email",
 			"default"
 			),
-		filters=dict(owner=party.name, default=True),
+		filters=dict(owner=party.name),
 	)
 	if shipment_forms:
 		return shipment_forms[0]
