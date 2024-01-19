@@ -132,6 +132,7 @@ def place_order():
 					throw(_("Only {0} in Stock for item {1}").format(item_stock.stock_qty, item.item_code))
 
 	sales_order.flags.ignore_permissions = True
+
 	sales_order.insert()
 	sales_order.submit()
 
@@ -140,6 +141,7 @@ def place_order():
 	
 	if shipment_form:
 		from erpnext.selling.doctype.sales_order.sales_order import make_delivery_note
+		# sales_order.run_method("make_delivery_note")
 	
 		delivery_note = make_delivery_note(sales_order)
 		delivery_note.shipment_provider="nova_poshta"
