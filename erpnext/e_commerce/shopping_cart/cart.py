@@ -772,7 +772,7 @@ def get_shipment_form(party=None):
 			"email",
 			"default"
 			),
-		filters=dict(owner=party.name),
+		filters=dict(owner=party.owner),
 	)
 	if shipment_forms:
 		return shipment_forms[0]
