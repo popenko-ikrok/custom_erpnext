@@ -107,8 +107,6 @@
   "shipping_address_column",
   "shipping_address_name",
   "shipping_address",
-  "shipment_provider",
-  "payment_method",
   "column_break_93",
   "dispatch_address_name",
   "dispatch_address",
@@ -1627,25 +1625,13 @@
    "fieldname": "named_place",
    "fieldtype": "Data",
    "label": "Named Place"
-  },
-  {
-   "fieldname": "payment_method",
-   "fieldtype": "Link",
-   "label": "Payment Method",
-   "options": "Payment Methods"
-  },
-  {
-   "fieldname": "shipment_provider",
-   "fieldtype": "Link",
-   "label": "Shipment Provider",
-   "options": "Shipment Providers"
   }
  ],
  "icon": "fa fa-file-text",
  "idx": 105,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-11-23 15:16:04.899802",
+ "modified": "2024-01-19 20:13:06.464112",
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Sales Order",
