@@ -75,7 +75,7 @@ class SellingController(StockController):
 
 			party_details = _get_party_details(
 				customer,
-				ignore_permissions=self.flags.ignore_permissions,
+				ignore_permissions=True,
 				doctype=self.doctype,
 				company=self.company,
 				posting_date=self.get("posting_date"),
