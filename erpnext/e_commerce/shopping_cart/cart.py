@@ -150,6 +150,7 @@ def place_order():
 		delivery_note.delivery_to_warehouse=shipment_form.warehouse_id
 		delivery_note.recipient_full_name=shipment_form.full_name
 		delivery_note.recipient_phone=shipment_form.phone
+		delivery_note.flags.ignore_permissions = True
 
 		delivery_note.save()
 
