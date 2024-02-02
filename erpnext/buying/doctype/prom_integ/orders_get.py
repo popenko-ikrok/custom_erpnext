@@ -16,7 +16,7 @@ conn = ERPClient(ERP_URL, api_key=API_KEY, api_secret=API_SECRET)
 AUTH_TOKEN = get_decrypted_password("Prom settings", "Prom settings", "prom_token")
 HOST = "my.prom.ua"
 p_client = PromClient(AUTH_TOKEN, HOST)
-four_days_plus = datetime.now(pytz.timezone('Europe/Kiev')) + timedelta(days=4).strftime("%Y-%m-%d")
+four_days_plus = datetime.now(pytz.timezone('Europe/Kiev')) + timedelta(days=4)
 
 def log_output(message):
     now = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
@@ -178,7 +178,7 @@ def create_sales_order(client_info, order):
                 fields=['price_list_rate']
                 )
             body['items'].append({
-                'delivery_date': '2023-01-31', 
+                'delivery_date': four_days_plus.strftime("%Y-%m-%d"),
                 'item_code': item_erp['item_code'],
                 'qty': int(item['quantity']),
                 'rate': item_price[0]['price_list_rate'],
