@@ -25,11 +25,11 @@
 
 				<!-- Price per UOM -->
 				<small class="formatted-price ml-2">
-					({{ price_info.formatted_price }} / {{ product_info.uom }})
+					({{ price_info.formatted_price }} / {{ _(product_info.uom) }})
 				</small>
 			</div>
 		{% else %}
-			{{ _("UOM") }} : {{ product_info.uom }}
+			{{ _("UOM") }} : {{ _(product_info.uom) }}
 		{% endif %}
 
 		{% if cart_settings.show_stock_availability %}

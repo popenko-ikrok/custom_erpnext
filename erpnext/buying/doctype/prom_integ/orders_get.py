@@ -6,11 +6,10 @@ import json
 from datetime import datetime
 from pprint import pprint
 import frappe
-from loguru import logger
 from frappe.utils.password import get_decrypted_password
 from frappe.utils import get_host_name
 
-ERP_URL = "https://{}".format(get_host_name())
+ERP_URL = "http://{}".format(get_host_name())
 API_KEY = frappe.db.get_value("Prom settings", "Prom settings", "erp_key")
 API_SECRET = get_decrypted_password("Prom settings", "Prom settings", "erp_secret")
 conn = ERPClient(ERP_URL, api_key=API_KEY, api_secret=API_SECRET)
@@ -183,25 +182,25 @@ def create_sales_order(client_info, order):
                 'item_code': item_erp['item_code'],
                 'qty': int(item['quantity']),
                 'rate': item_price[0]['price_list_rate'],
-                'warehouse': 'All Warehouses - UpC',
+                'warehouse': 'All Warehouses - UP',
                 'doctype': 'Sales Order Item'
             })
     return conn.insert(doc=body)
 
 @frappe.whitelist()
 def main():
-    order = get_prom_order()[0]
+    orders = get_prom_order()
+    for order in orders:
+        client_id = order['client_id']
+        client_prom = p_client.get_client_by_id(client_id)['client']
+        print(client_prom['last_name']+" "+client_prom['first_name'])
+        # customer_exists(
+        #     client_prom,
+        #     order['delivery_address'],
+        #     order['delivery_option']['name']
+        #     )
 
-    client_id = order['client_id']
-    client_prom = p_client.get_client_by_id(client_id)['client']
-    print(client_prom['last_name']+" "+client_prom['first_name'])
-    # customer_exists(
-    #     client_prom,
-    #     order['delivery_address'],
-    #     order['delivery_option']['name']
-    #     )
-
-    response = create_sales_order(client_prom, order)
+        response = create_sales_order(client_prom, order)
 
 # Black d (pip)
 if __name__ == "__main__":
