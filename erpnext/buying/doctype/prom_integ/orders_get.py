@@ -12,6 +12,7 @@ from frappe.utils import get_host_name
 ERP_URL = "http://{}".format(get_host_name())
 API_KEY = frappe.db.get_value("Prom settings", "Prom settings", "erp_key")
 API_SECRET = get_decrypted_password("Prom settings", "Prom settings", "erp_secret")
+COMPANY = frappe.db.get_single_value("E Commerce Settings", "company")
 conn = ERPClient(ERP_URL, api_key=API_KEY, api_secret=API_SECRET)
 
 AUTH_TOKEN = get_decrypted_password("Prom settings", "Prom settings", "prom_token")
@@ -151,7 +152,7 @@ def create_sales_order(client_info, order):
     body = {
         'customer': client_info['client_full_name'],
         'transaction_date': order_time_created.strftime("%Y-%m-%d"),
-        'company': 'Up_Company',
+        'company': COMPANY,
         'currency': 'UAH',
         'territory': 'Ukraine',
         'order_type': 'Sales',
