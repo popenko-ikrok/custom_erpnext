@@ -142,9 +142,17 @@ def place_order():
 	if shipment_form:
 		from erpnext.selling.doctype.sales_order.sales_order import make_delivery_note
 		# sales_order.run_method("make_delivery_note")
-	
+		sender_defaults = frappe.get_doc(
+			"NovaPoshta",
+			"NovaPoshta",
+			fields=["pickup_city", "pickup_warehouse", "sender_full_name", "sender_phone"]
+			)
 		delivery_note = make_delivery_note(sales_order)
 		delivery_note.shipment_provider="nova_poshta"
+		delivery_note.pickup_warehouse = sender_defaults.pickup_warehouse if sender_defaults.pickup_warehouse else ""
+		delivery_note.pickup_city = sender_defaults.pickup_city if sender_defaults.pickup_city else ""
+		delivery_note.sender_full_name = sender_defaults.sender_full_name if sender_defaults.sender_full_name else ""
+		delivery_note.sender_phone = sender_defaults.sender_phone if sender_defaults.sender_phone else ""
 		delivery_note.custom_shipment_form=shipment_form.id
 		delivery_note.delivery_to_city=shipment_form.city_id
 		delivery_note.delivery_to_warehouse=shipment_form.warehouse_id
