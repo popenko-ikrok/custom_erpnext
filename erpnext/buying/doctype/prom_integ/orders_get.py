@@ -1,13 +1,11 @@
-from dotenv import load_dotenv
 from .prom_client.frappeclient import FrappeClient as ERPClient
 from .prom_client.prom_sync import EvoClient as PromClient
-import os
 import json
-from datetime import datetime
-from pprint import pprint
+from datetime import datetime, timedelta
 import frappe
 from frappe.utils.password import get_decrypted_password
 from frappe.utils import get_host_name
+import pytz
 
 ERP_URL = "http://{}".format(get_host_name())
 API_KEY = frappe.db.get_value("Prom settings", "Prom settings", "erp_key")
@@ -18,6 +16,7 @@ conn = ERPClient(ERP_URL, api_key=API_KEY, api_secret=API_SECRET)
 AUTH_TOKEN = get_decrypted_password("Prom settings", "Prom settings", "prom_token")
 HOST = "my.prom.ua"
 p_client = PromClient(AUTH_TOKEN, HOST)
+four_days_plus = datetime.now(pytz.timezone('Europe/Kiev')) + timedelta(days=4).strftime("%Y-%m-%d")
 
 def log_output(message):
     now = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
