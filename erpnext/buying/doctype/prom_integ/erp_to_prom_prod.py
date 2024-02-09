@@ -22,7 +22,6 @@ conn = ERPClient(ERP_URL, api_key=API_KEY, api_secret=API_SECRET)
 AUTH_TOKEN = get_decrypted_password("Prom settings", "Prom settings", "prom_token")
 HOST = "my.prom.ua"
 p_client = PromClient(AUTH_TOKEN, HOST)
-logger.add("logs/prod_{time}.log")
 
 def get_doctype_list(doctype, fields, filters=[]):
     return conn.get_list(
@@ -49,7 +48,6 @@ def get_images(name):
         main_image = []
     images = [image['url'] for image in images][::-1]
     images = main_image + images
-    # logger.debug(images) 
     if images:
         return ", ".join(str(image) for image in images)
     else:
@@ -116,7 +114,6 @@ def prom_preparing(web_items):
     
     for index, web_item in web_items.iterrows():
         web_items.loc[index, 'item_group'] = get_group_ids(web_items.loc[index, 'item_group'])
-        logger.info(web_item['website_image'])
         # if web_items.loc[index, 'website_image']:
         #     web_items.loc[index, 'website_image'] += get_images(web_item['name'])
         web_images = get_images(web_item['name'])

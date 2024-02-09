@@ -153,11 +153,11 @@ def place_order():
 		delivery_note.pickup_city = sender_defaults.pickup_city if sender_defaults.pickup_city else ""
 		delivery_note.sender_full_name = sender_defaults.sender_full_name if sender_defaults.sender_full_name else ""
 		delivery_note.sender_phone = sender_defaults.sender_phone if sender_defaults.sender_phone else ""
-		delivery_note.custom_shipment_form=shipment_form.id
-		delivery_note.delivery_to_city=shipment_form.city_id
-		delivery_note.delivery_to_warehouse=shipment_form.warehouse_id
-		delivery_note.recipient_full_name=shipment_form.full_name
-		delivery_note.recipient_phone=shipment_form.phone
+		delivery_note.custom_shipment_form = shipment_form.id
+		delivery_note.delivery_to_city = shipment_form.city_id
+		delivery_note.delivery_to_warehouse = shipment_form.warehouse_id
+		delivery_note.recipient_full_name = shipment_form.full_name
+		delivery_note.recipient_phone = shipment_form.phone
 		delivery_note.flags.ignore_permissions = True
 
 		delivery_note.save()
