@@ -14,27 +14,24 @@ COMPANY = frappe.db.get_single_value("E Commerce Settings", "company")
 conn = ERPClient(ERP_URL, api_key=API_KEY, api_secret=API_SECRET)
 
 AUTH_TOKEN = get_decrypted_password("Prom settings", "Prom settings", "prom_token")
-HOST = "my.prom.ua"
-p_client = PromClient(AUTH_TOKEN, HOST)
+p_client = PromClient(AUTH_TOKEN)
 four_days_plus = datetime.now(pytz.timezone('Europe/Kiev')) + timedelta(days=4)
 
-def log_output(message):
-    now = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
-    print(now + " - " + message)
+status_mapper = {
+ "pending": "On Hold",
+ "received": "To Deliver and Bill",
+ "delivered": "Completed",
+ "canceled": "Cancelled",
+ "draft": "Draft",
+ "paid": "To Deliver"
+}
 
-
-def get_prom_order(limit=50):
+def get_prom_order(limit=100):
     '''
     :param limit: count of orders to return
     :return: list of last prom orders
     '''
     return p_client.get_orders(limit=limit)['orders']
-
-
-def clients_to_json(client_info):
-    with open("clients.json", "a", encoding="utf-8") as output:
-        json.dump(client_info, output, ensure_ascii=False)
-        output.write(",\n")
 
 
 def create_shipping_address(delivery_address, full_name):
@@ -64,10 +61,6 @@ def create_customer(client_info):
         'doctype': 'Customer'   
     }
     return conn.insert(doc=body)
-
-
-def edit_customer_contact(client_info):
-    pass
 
 
 def create_customer_contact(client_info):
@@ -128,18 +121,7 @@ def customer_exists(client_info, delivery_address, delivery_option):
                     delivery_address,
                     client_info['client_full_name']
                     )
-        
-def add_all_clients():
-    orders = get_prom_order(5)
-    for order in orders:
-        client_id = order['client_id']
-        client_prom = p_client.get_client_by_id(client_id)['client']
-        print(client_prom['last_name']+" "+client_prom['first_name'])
-        customer_exists(
-        client_prom,
-        order['delivery_address'],
-        order['delivery_option']['name']
-        )
+
 
 def create_sales_order(client_info, order):
     customer_exists(
@@ -148,48 +130,88 @@ def create_sales_order(client_info, order):
         order['delivery_option']['name']
         )
     order_time_created = datetime.strptime(order['date_created'], "%Y-%m-%dT%X.%f+00:00")
-    body = {
-        'customer': client_info['client_full_name'],
-        'transaction_date': order_time_created.strftime("%Y-%m-%d"),
-        'company': COMPANY,
-        'currency': 'UAH',
-        'territory': 'Ukraine',
-        'order_type': 'Sales',
-        'contact_email': order['email'],
-        'contact_mobile': order['phone'],
-        'conversion_rate': 0.4035,
-        'items': [],
-        'doctype': 'Sales Order'
-    }
-    for item in order['products']:
-        print(f"{item}")
-        item_erp = conn.get_list(
-            'Website Item',
-            filters=[['Website Item', 'item_code', '=', item['sku']]])
-        if item_erp:
-            item_erp = item_erp[0]
-        else:
-            frappe.msgprint("Product not found.")
-        # item_erp = conn.get_doc('Website Item', item['external_id'])
-        if item_erp.get('item_code'):
-            item_price = conn.get_doc(
-                'Item Price',
-                filters=[['Item Price', 'item_code', '=', item_erp['item_code']]],
-                fields=['price_list_rate']
-                )
-            body['items'].append({
-                'delivery_date': four_days_plus.strftime("%Y-%m-%d"),
-                'item_code': item_erp['item_code'],
-                'qty': int(item['quantity']),
-                'rate': item_price[0]['price_list_rate'],
-                'warehouse': 'All Warehouses - UP',
-                'doctype': 'Sales Order Item'
-            })
-    return conn.insert(doc=body)
+    
+    if not order['status'] in status_mapper.keys():
+        status_mapper[order['status']] = "On Hold"
+
+    print("*"*10, status_mapper[order['status']], order['status'])
+    order_erp = frappe.get_list("Sales Order", filters={'custom_prom_id': order['id']})
+
+    if not order_erp:
+        body = {
+            'customer': client_info['client_full_name'],
+            'transaction_date': order_time_created.strftime("%Y-%m-%d"),
+            'custom_prom_id': order['id'],
+            'company': COMPANY,
+            'currency': 'UAH',
+            'territory': 'Ukraine',
+            'order_type': 'Sales',
+            'contact_email': order['email'],
+            'contact_mobile': order['phone'],
+            'conversion_rate': 0.4035,
+            'items': [],
+            'doctype': 'Sales Order'
+        }
+
+        for item in order['products']:
+            item_erp = conn.get_list(
+                'Website Item',
+                filters=[['Website Item', 'item_code', '=', item['sku']]])
+            if item_erp:
+                item_erp = item_erp[0]
+            else:
+                frappe.msgprint("Product not found.")
+            # item_erp = conn.get_doc('Website Item', item['external_id'])
+            if item_erp.get('item_code'):
+                item_price = conn.get_doc(
+                    'Item Price',
+                    filters=[['Item Price', 'item_code', '=', item_erp['item_code']]],
+                    fields=['price_list_rate']
+                    )
+                body['items'].append({
+                    'delivery_date': four_days_plus.strftime("%Y-%m-%d"),
+                    'item_code': item_erp['item_code'],
+                    'qty': int(item['quantity']),
+                    'rate': item_price[0]['price_list_rate'],
+                    'warehouse': 'All Warehouses - UP',
+                    'doctype': 'Sales Order Item'
+                })
+        order_erp = frappe.get_doc(body)
+        # frappe.db.commit()
+        # order_erp = frappe.get_doc("Sales Order", temp["name"])
+        order_erp.submit()
+        order_erp.set_status(True, status_mapper[order['status']])
+        order_erp.save()
+        from erpnext.selling.doctype.sales_order.sales_order import make_delivery_note
+        delivery_note = make_delivery_note(order_erp)
+        delivery_data = order.get("delivery_provider_data")
+        if delivery_data.get("provider") == "nova_poshta":
+            delivery_note.shipment_provider="nova_poshta"
+            sender_defaults = frappe.get_doc(
+			"NovaPoshta",
+			"NovaPoshta",
+			fields=["pickup_city", "pickup_warehouse", "sender_full_name", "sender_phone"]
+			)
+            delivery_note.pickup_warehouse = sender_defaults.pickup_warehouse if sender_defaults.pickup_warehouse else ""
+            delivery_note.pickup_city = sender_defaults.pickup_city if sender_defaults.pickup_city else ""
+            delivery_note.sender_full_name = sender_defaults.sender_full_name if sender_defaults.sender_full_name else ""
+            delivery_note.sender_phone = sender_defaults.sender_phone if sender_defaults.sender_phone else ""
+            delivery_note.delivery_to_warehouse = delivery_data.get("recipient_warehouse_id")
+        delivery_note.save()
+        return order_erp
+    elif order_erp[0].docstatus == 0:
+        order_erp = order_erp[0]
+        order_erp.submit()
+        order_erp.set_status(True, status_mapper[order['status']])
+        order_erp.save()
+    i += 1
+
 
 @frappe.whitelist()
-def main():
+def get_all_orders():
     orders = get_prom_order()
+    orders.reverse()
+
     for order in orders:
         client_id = order['client_id']
         client_prom = p_client.get_client_by_id(client_id)['client']
@@ -201,7 +223,21 @@ def main():
         #     )
 
         response = create_sales_order(client_prom, order)
+i = 0
+@frappe.whitelist()
+def check_for_new_orders():
+    orders = get_prom_order(20)
 
-# Black d (pip)
+    for order in orders:
+        status = order.get('status')
+        if status == "pending" or status == "received":
+            client_id = order['client_id']
+            client_prom = p_client.get_client_by_id(client_id)['client']
+            response = create_sales_order(client_prom, order)
+            print(response)
+    frappe.msgprint(frappe._("{} orders have been added successfully.".format(i)))
+    
+
+
 if __name__ == "__main__":
-    main()
+    get_all_orders()

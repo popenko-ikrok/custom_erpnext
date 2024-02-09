@@ -34,7 +34,7 @@ frappe.ui.form.on("Prom Settings", {
 	get_order: function(frm) {
         
 		frappe.call({
-            method: "erpnext.buying.doctype.prom_integ.orders_get.main", 
+            method: "erpnext.buying.doctype.prom_integ.orders_get.get_all_orders", 
             freeze: true,
             freeze_message: "Fetching order"
         });
