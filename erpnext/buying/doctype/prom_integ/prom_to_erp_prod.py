@@ -8,7 +8,7 @@ from frappe.utils import get_host_name
 from .groups_get import main as group_get
 import frappe
 
-ERP_URL = 'http://{}'.format(get_host_name())
+ERP_URL = 'https://{}'.format(get_host_name())
 API_KEY = frappe.db.get_value('Prom settings', 'Prom settings', 'erp_key')
 API_SECRET = get_decrypted_password('Prom settings', 'Prom settings', 'erp_secret')
 conn = ERPClient(ERP_URL, api_key=API_KEY, api_secret=API_SECRET)

@@ -18,12 +18,12 @@ p_client = PromClient(AUTH_TOKEN)
 four_days_plus = datetime.now(pytz.timezone('Europe/Kiev')) + timedelta(days=4)
 
 status_mapper = {
- "pending": "On Hold",
- "received": "To Deliver and Bill",
- "delivered": "Completed",
- "canceled": "Cancelled",
- "draft": "Draft",
- "paid": "To Deliver"
+    "pending": "To Deliver and Bill",
+    "received": "To Deliver and Bill",
+    "delivered": "Completed",
+    "canceled": "Cancelled",
+    "draft": "Draft",
+    "paid": "To Deliver"
 }
 
 def get_prom_order(limit=100):
@@ -60,7 +60,9 @@ def create_customer(client_info):
         'customer_group': 'Individual',
         'doctype': 'Customer'   
     }
-    return conn.insert(doc=body)
+    doc = frappe.get_doc(body)
+    doc.save()
+    return doc
 
 
 def create_customer_contact(client_info):
@@ -88,7 +90,9 @@ def create_customer_contact(client_info):
         })
     body['phone_nos'] = phones
     body['email_ids'] = emails
-    return conn.insert(doc=body)
+    doc = frappe.get_doc(body)
+    doc.save()
+    return doc
 
 
 def customer_exists(client_info, delivery_address, delivery_option):
@@ -124,12 +128,15 @@ def customer_exists(client_info, delivery_address, delivery_option):
 
 
 def create_sales_order(client_info, order):
+    global i
     customer_exists(
         client_info,
         order['delivery_address'],
         order['delivery_option']['name']
         )
     order_time_created = datetime.strptime(order['date_created'], "%Y-%m-%dT%X.%f+00:00")
+    print("*"*30, "Customer created?")
+    assert frappe.db.exists("Customer", client_info['client_full_name'])
     
     if not order['status'] in status_mapper.keys():
         status_mapper[order['status']] = "On Hold"
@@ -138,6 +145,7 @@ def create_sales_order(client_info, order):
     order_erp = frappe.get_list("Sales Order", filters={'custom_prom_id': order['id']})
 
     if not order_erp:
+        print("#"*50)
         body = {
             'customer': client_info['client_full_name'],
             'transaction_date': order_time_created.strftime("%Y-%m-%d"),
@@ -183,33 +191,35 @@ def create_sales_order(client_info, order):
         order_erp.set_status(True, status_mapper[order['status']])
         order_erp.save()
         from erpnext.selling.doctype.sales_order.sales_order import make_delivery_note
-        delivery_note = make_delivery_note(order_erp)
-        delivery_data = order.get("delivery_provider_data")
-        if delivery_data.get("provider") == "nova_poshta":
-            delivery_note.shipment_provider="nova_poshta"
-            sender_defaults = frappe.get_doc(
-			"NovaPoshta",
-			"NovaPoshta",
-			fields=["pickup_city", "pickup_warehouse", "sender_full_name", "sender_phone"]
-			)
-            delivery_note.pickup_warehouse = sender_defaults.pickup_warehouse if sender_defaults.pickup_warehouse else ""
-            delivery_note.pickup_city = sender_defaults.pickup_city if sender_defaults.pickup_city else ""
-            delivery_note.sender_full_name = sender_defaults.sender_full_name if sender_defaults.sender_full_name else ""
-            delivery_note.sender_phone = sender_defaults.sender_phone if sender_defaults.sender_phone else ""
-            delivery_note.delivery_to_warehouse = delivery_data.get("recipient_warehouse_id")
-        delivery_note.save()
+        if status_mapper[order['status']] != "On Hold":
+            delivery_note = make_delivery_note(order_erp)
+            delivery_data = order.get("delivery_provider_data")
+            if delivery_data.get("provider") == "nova_poshta":
+                delivery_note.shipment_provider="nova_poshta"
+                sender_defaults = frappe.get_doc(
+                "NovaPoshta",
+                "NovaPoshta",
+                fields=["pickup_city", "pickup_warehouse", "sender_full_name", "sender_phone"]
+                )
+                delivery_note.pickup_warehouse = sender_defaults.pickup_warehouse if sender_defaults.pickup_warehouse else ""
+                delivery_note.pickup_city = sender_defaults.pickup_city if sender_defaults.pickup_city else ""
+                delivery_note.sender_full_name = sender_defaults.sender_full_name if sender_defaults.sender_full_name else ""
+                delivery_note.sender_phone = sender_defaults.sender_phone if sender_defaults.sender_phone else ""
+                delivery_note.delivery_to_warehouse = delivery_data.get("recipient_warehouse_id")
+            delivery_note.save()
+        i += 1
         return order_erp
     elif order_erp[0].docstatus == 0:
         order_erp = order_erp[0]
         order_erp.submit()
         order_erp.set_status(True, status_mapper[order['status']])
         order_erp.save()
-    i += 1
 
 
+i = 0
 @frappe.whitelist()
 def get_all_orders():
-    orders = get_prom_order()
+    orders = get_prom_order(50)
     orders.reverse()
 
     for order in orders:
@@ -223,14 +233,15 @@ def get_all_orders():
         #     )
 
         response = create_sales_order(client_prom, order)
-i = 0
+
 @frappe.whitelist()
 def check_for_new_orders():
-    orders = get_prom_order(20)
+    orders = get_prom_order(10)
 
     for order in orders:
         status = order.get('status')
         if status == "pending" or status == "received":
+            print("*"*30, "Start")
             client_id = order['client_id']
             client_prom = p_client.get_client_by_id(client_id)['client']
             response = create_sales_order(client_prom, order)
