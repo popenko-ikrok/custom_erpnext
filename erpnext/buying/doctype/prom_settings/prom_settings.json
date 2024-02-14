@@ -14,7 +14,8 @@
   "actions_section",
   "import_prom_prod",
   "export_prom_prod",
-  "get_order"
+  "get_order",
+  "get_new_order"
  ],
  "fields": [
   {
@@ -59,13 +60,18 @@
   {
    "fieldname": "get_order",
    "fieldtype": "Button",
-   "label": "Get last order"
+   "label": "Get All Orders"
+  },
+  {
+   "fieldname": "get_new_order",
+   "fieldtype": "Button",
+   "label": "Get New Orders"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-10-25 17:13:20.823212",
+ "modified": "2024-02-09 15:01:16.059643",
  "modified_by": "Administrator",
  "module": "Buying",
  "name": "Prom Settings",

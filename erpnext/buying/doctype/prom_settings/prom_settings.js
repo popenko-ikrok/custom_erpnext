@@ -32,13 +32,19 @@ frappe.ui.form.on("Prom Settings", {
 	},
 
 	get_order: function(frm) {
-        
 		frappe.call({
             method: "erpnext.buying.doctype.prom_integ.orders_get.get_all_orders", 
             freeze: true,
-            freeze_message: "Fetching order"
-        });
-        
+            freeze_message: "Fetching orders"
+        });  
+	},
+
+    get_new_order: function(frm) {
+		frappe.call({
+            method: "erpnext.buying.doctype.prom_integ.orders_get.check_for_new_orders", 
+            freeze: true,
+            freeze_message: "Fetching orders"
+        });  
 	},
 
 	export_prom_prod: function(frm) {
