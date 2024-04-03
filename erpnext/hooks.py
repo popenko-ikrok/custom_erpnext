@@ -420,6 +420,7 @@ scheduler_events = {
 		"erpnext.projects.doctype.project.project.project_status_update_reminder",
 		"erpnext.projects.doctype.project.project.hourly_reminder",
 		"erpnext.projects.doctype.project.project.collect_project_status",
+        "erpnext.buying.doctype.prom_integ.orders_get.check_for_new_orders"
 	],
 	"hourly_long": [
 		"erpnext.accounts.doctype.subscription.subscription.process_all",

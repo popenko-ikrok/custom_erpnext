@@ -221,7 +221,6 @@ class PaymentRequest(Document):
 	def set_as_paid(self):
 		if self.payment_channel == "Phone":
 			self.db_set("status", "Paid")
-
 		else:
 			payment_entry = self.create_payment_entry()
 			self.make_invoice()
@@ -231,6 +230,7 @@ class PaymentRequest(Document):
 	def create_payment_entry(self, submit=True):
 		"""create entry"""
 		frappe.flags.ignore_account_permission = True
+		frappe.flags.ignore_permission = True
 
 		ref_doc = frappe.get_doc(self.reference_doctype, self.reference_name)
 
