@@ -541,7 +541,7 @@ def get_party(user=None):
 
 	contact_name = get_contact_name(user)
 	party = None
-
+	print(contact_name)
 	contact = None
 	if contact_name:
 		contact = frappe.get_doc("Contact", contact_name)
@@ -588,7 +588,7 @@ def get_party(user=None):
 		contact.append("links", dict(link_doctype="Customer", link_name=customer.name))
 		contact.flags.ignore_mandatory = True
 		contact.save(ignore_permissions=True)
-
+		
 		return customer
 
 
@@ -788,7 +788,7 @@ def get_shipment_form(party=None):
 			"email",
 			"default"
 			),
-		filters=dict(owner=party.owner),
+		filters=dict(owner=owner),
 	)
 	if shipment_forms:
 		return shipment_forms[0]
